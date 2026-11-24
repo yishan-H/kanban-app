@@ -3,15 +3,113 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>CopilotTest</title>
+    <meta name="description" content="CopilotTest 是一個持續探索、實踐想法的起點。">
+    <meta name="theme-color" content="#f7f8f4">
+    <title>CopilotTest — 讓想法開始發生</title>
     <link rel="stylesheet" href="style.css">
     <script src="app.js" defer></script>
   </head>
   <body>
-    <main>
-      <h1>Hello, World!</h1>
-      <p>歡迎使用 CopilotTest。</p>
-      <footer>&copy; <span id="year"></span> CopilotTest</footer>
+    <header class="site-header">
+      <a class="brand" href="#top" aria-label="CopilotTest 首頁">
+        <span class="brand-mark" aria-hidden="true">C</span>
+        <span>CopilotTest</span>
+      </a>
+      <nav class="site-nav" aria-label="主要導覽">
+        <a href="#about">關於</a>
+        <a href="#highlights">探索特色</a>
+      </nav>
+      <a class="header-link" href="#highlights">
+        開始探索 <span aria-hidden="true">↗</span>
+      </a>
+    </header>
+
+    <main id="top">
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-copy">
+          <p class="eyebrow"><span class="status-dot"></span> 個人專案・持續更新</p>
+          <h1 id="hero-title">讓每個好點子，<br><span>都有開始的地方。</span></h1>
+          <p class="hero-description">
+            歡迎來到 CopilotTest。這裡是一個探索、嘗試與實踐想法的小小空間，
+            每一步都讓靈感更接近真實。
+          </p>
+          <div class="hero-actions">
+            <a class="button button-primary" href="#about">
+              認識這個專案 <span aria-hidden="true">↓</span>
+            </a>
+            <a class="text-link" href="#highlights">看看有什麼不同</a>
+          </div>
+          <p class="hero-note">簡單起步，慢慢做出自己的樣子。</p>
+        </div>
+
+        <div class="hero-art" aria-hidden="true">
+          <div class="art-orbit orbit-outer"></div>
+          <div class="art-orbit orbit-inner"></div>
+          <div class="art-spark spark-one"></div>
+          <div class="art-spark spark-two"></div>
+          <div class="art-card">
+            <span class="art-card-label">IDEA / 001</span>
+            <span class="art-card-symbol">✳</span>
+            <span class="art-card-caption">從一個念頭<br>到一個新可能</span>
+            <span class="art-card-footer">KEEP MAKING <span>↗</span></span>
+          </div>
+          <span class="art-side-note">A SPACE TO EXPLORE</span>
+        </div>
+      </section>
+
+      <section class="about-section" id="about" aria-labelledby="about-title">
+        <div class="section-label"><span>01</span> 關於這裡</div>
+        <div class="about-content">
+          <h2 id="about-title">不必一開始就很完美，<br>重要的是開始。</h2>
+          <p>
+            CopilotTest 是一個持續累積的小專案。從清楚的起點出發，
+            一邊探索、一邊調整，讓每個新想法都有機會成為下一步。
+          </p>
+        </div>
+      </section>
+
+      <section class="highlights-section" id="highlights" aria-labelledby="highlights-title">
+        <div class="section-heading">
+          <div>
+            <div class="section-label"><span>02</span> 專案特色</div>
+            <h2 id="highlights-title">留一點空間，<br>給更多可能。</h2>
+          </div>
+          <p>一個好的起點，讓接下來的每一步都更自在。</p>
+        </div>
+
+        <div class="feature-grid">
+          <article class="feature-card">
+            <span class="feature-number">01</span>
+            <div class="feature-icon icon-sun" aria-hidden="true">✳</div>
+            <h3>輕鬆起步</h3>
+            <p>保持簡單清楚，專注在真正想做的事情上。</p>
+            <span class="feature-arrow" aria-hidden="true">↗</span>
+          </article>
+          <article class="feature-card">
+            <span class="feature-number">02</span>
+            <div class="feature-icon icon-leaf" aria-hidden="true">⌁</div>
+            <h3>持續探索</h3>
+            <p>每一次嘗試，都是讓想法逐漸成形的過程。</p>
+            <span class="feature-arrow" aria-hidden="true">↗</span>
+          </article>
+          <article class="feature-card">
+            <span class="feature-number">03</span>
+            <div class="feature-icon icon-star" aria-hidden="true">✦</div>
+            <h3>自在成長</h3>
+            <p>不急著抵達終點，享受一步步累積的成果。</p>
+            <span class="feature-arrow" aria-hidden="true">↗</span>
+          </article>
+        </div>
+      </section>
     </main>
+
+    <footer class="site-footer">
+      <a class="brand footer-brand" href="#top">
+        <span class="brand-mark" aria-hidden="true">C</span>
+        <span>CopilotTest</span>
+      </a>
+      <p>讓想法開始發生。</p>
+      <span class="copyright">&copy; <span id="year"></span> CopilotTest</span>
+    </footer>
   </body>
 </html>
