@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>記帳小工具</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <main>
+    <h1>記帳小工具</h1>
+    <div class="month"><label for="m" style="margin:0">月份</label><input type="month" id="m"></div>
+    <section class="balance" aria-live="polite">
+      <small>本月結餘</small><div class="big" id="bal">$0</div>
+      <div class="row2"><div><small>收入</small><b id="sin">$0</b></div><div><small>支出</small><b id="sout">$0</b></div></div>
+    </section>
+
+    <div class="card">
+      <div class="seg" role="group" aria-label="類型">
+        <button type="button" id="tOut" aria-pressed="true">支出</button>
+        <button type="button" id="tIn" aria-pressed="false">收入</button>
+      </div>
+      <div class="grid">
+        <label>金額<input type="number" id="amt" inputmode="decimal" min="0" step="any" placeholder="例如 120"></label>
+        <label>分類<select id="cat"></select></label>
+        <label>日期<input type="date" id="date"></label>
+        <label>備註<input type="text" id="note" placeholder="選填，例如 午餐"></label>
+      </div>
+      <button class="add" id="add" type="button">新增一筆</button>
+      <div id="msg" class="empty" style="padding:8px 0 0;color:var(--out)"></div>
+    </div>
+
+    <h2>分類統計（支出）</h2>
+    <div id="cats"></div>
+    <h2>明細</h2>
+    <div class="card" style="margin-top:0"><ul id="list"></ul></div>
+  </main>
+</body>
+</html>
