@@ -19,6 +19,13 @@
     return date.getFullYear() + "-" + ("0" + (date.getMonth() + 1)).slice(-2) + "-" + ("0" + date.getDate()).slice(-2);
   }
 
+  function updateDateDisplay() {
+    var match = $("date").value.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+    $("dateDisplay").textContent = match
+      ? match[1] + "年" + Number(match[2]) + "月" + Number(match[3]) + "日"
+      : "選擇日期";
+  }
+
   function money(amount) {
     return "$" + Math.round(amount).toLocaleString("zh-TW");
   }
@@ -312,7 +319,10 @@
   };
   $("m").onchange = render;
 
+  $("date").addEventListener("input", updateDateDisplay);
+  $("date").addEventListener("change", updateDateDisplay);
   $("date").value = today();
+  updateDateDisplay();
   $("m").value = today().slice(0, 7);
   fillCats();
   render();
