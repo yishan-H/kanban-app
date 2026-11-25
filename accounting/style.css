@@ -293,8 +293,9 @@ h2 {
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 10px;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  column-gap: 12px;
+  row-gap: 10px;
 }
 
 .grid > label {
@@ -323,8 +324,19 @@ input, select {
 
 input[type="date"] {
   display: block;
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
   min-inline-size: 0;
   max-inline-size: 100%;
+}
+
+.grid > label:nth-child(4) input[type="text"] {
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
 }
 
 .full {
@@ -502,7 +514,7 @@ li:last-child {
   }
 }
 
-@media (max-width: 340px) {
+@media (max-width: 431px) {
   .grid > label:nth-child(3),
   .grid > label:nth-child(4) {
     grid-column: 1 / -1;
