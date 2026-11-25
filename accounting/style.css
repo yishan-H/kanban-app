@@ -133,6 +133,59 @@ h2 {
   background: var(--surface);
 }
 
+[hidden] {
+  display: none !important;
+}
+
+.auth-card {
+  margin-top: 0;
+}
+
+.auth-card h2 {
+  margin: 0 0 12px;
+}
+
+.auth-fields {
+  display: grid;
+  gap: 10px;
+}
+
+.status {
+  margin: 8px 0 0;
+  color: var(--out);
+  font-size: 14px;
+}
+
+.status:empty {
+  display: none;
+}
+
+.accountbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+  color: var(--mute);
+  font-size: 14px;
+}
+
+.accountbar b {
+  color: var(--ink);
+  overflow-wrap: anywhere;
+}
+
+.secondary {
+  flex: 0 0 auto;
+  padding: 6px 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--ink);
+  font: inherit;
+  cursor: pointer;
+}
+
 .seg {
   display: flex;
   overflow: hidden;
@@ -200,6 +253,11 @@ input, select {
 button:focus-visible, input:focus-visible, select:focus-visible {
   outline: 2px solid var(--in);
   outline-offset: 2px;
+}
+
+button:disabled {
+  cursor: wait;
+  opacity: 0.65;
 }
 
 .cat {
@@ -286,4 +344,10 @@ li:last-child {
   padding: 20px 0;
   color: var(--mute);
   text-align: center;
+}
+
+@media (max-width: 420px) {
+  .accountbar {
+    align-items: flex-start;
+  }
 }
