@@ -146,6 +146,69 @@
       '</div>';
   }
 
+  function previousMonthKey(month) {
+    var match = /^(\d{4})-(\d{2})$/.exec(month);
+    if (!match) {
+      return "";
+    }
+
+    var year = Number(match[1]);
+    var monthNumber = Number(match[2]);
+    if (monthNumber < 1 || monthNumber > 12) {
+      return "";
+    }
+    if (monthNumber === 1) {
+      return (year - 1) + "-12";
+    }
+    return year + "-" + ("0" + (monthNumber - 1)).slice(-2);
+  }
+
+  function renderMonthlyReport(month, rows, income, expenses, balance, categories) {
+    var monthMatch = /^(\d{4})-(\d{2})$/.exec(month);
+    $("monthlyReportTitle").textContent = monthMatch
+      ? Number(monthMatch[1]) + "年" + Number(monthMatch[2]) + "月 月報"
+      : "月報";
+
+    var previousMonth = previousMonthKey(month);
+    var previousExpenses = 0;
+    if (previousMonth) {
+      items.forEach(function (item) {
+        if (item.date.slice(0, 7) === previousMonth && item.type === "out") {
+          previousExpenses += item.amount;
+        }
+      });
+    }
+
+    var comparison = "上月無支出資料";
+    var comparisonStatus = "no-data";
+    if (previousExpenses > 0) {
+      if (expenses > previousExpenses) {
+        comparison = "較上月增加 " + budgetPercentage((expenses - previousExpenses) / previousExpenses * 100);
+        comparisonStatus = "increase";
+      } else if (expenses < previousExpenses) {
+        comparison = "較上月減少 " + budgetPercentage((previousExpenses - expenses) / previousExpenses * 100);
+        comparisonStatus = "decrease";
+      } else {
+        comparison = "與上月持平";
+        comparisonStatus = "same";
+      }
+    }
+
+    var topCategory = categories.length
+      ? '<strong>' + esc(categories[0].name) + " " + money(categories[0].amount) + "</strong>"
+      : "<strong>本月尚無支出</strong>";
+
+    $("monthlyReportContent").innerHTML =
+      '<div class="monthly-report-grid">' +
+        '<div class="monthly-report-metric monthly-report-metric--income"><span class="monthly-report-metric-label">本月總收入</span><strong class="monthly-report-metric-value">' + money(income) + "</strong></div>" +
+        '<div class="monthly-report-metric monthly-report-metric--expense"><span class="monthly-report-metric-label">本月總支出</span><strong class="monthly-report-metric-value">' + money(expenses) + "</strong></div>" +
+        '<div class="monthly-report-metric"><span class="monthly-report-metric-label">本月結餘</span><strong class="monthly-report-metric-value">' + (balance < 0 ? "-" : "") + money(Math.abs(balance)) + "</strong></div>" +
+        '<div class="monthly-report-metric"><span class="monthly-report-metric-label">本月交易筆數</span><strong class="monthly-report-metric-value">' + rows.length + " 筆</strong></div>" +
+      '</div>' +
+      '<div class="monthly-report-highlight"><span>最大支出分類</span>' + topCategory + "</div>" +
+      '<div class="monthly-report-comparison monthly-report-comparison--' + comparisonStatus + '"><span>與上月比較</span><strong>' + esc(comparison) + "</strong></div>";
+  }
+
   function setType(newType) {
     type = newType;
     $("tOut").setAttribute("aria-pressed", type === "out");
@@ -176,7 +239,8 @@
       }
     });
 
-    $("bal").textContent = (income - expenses < 0 ? "-" : "") + money(Math.abs(income - expenses));
+    var balance = income - expenses;
+    $("bal").textContent = (balance < 0 ? "-" : "") + money(Math.abs(balance));
     $("sin").textContent = money(income);
     $("sout").textContent = money(expenses);
     renderBudget(month, expenses);
@@ -222,6 +286,7 @@
     } else {
       $("cats").innerHTML = '<div class="empty-state"><img class="mascot" src="./images/penguin.jpg" alt="" aria-hidden="true"><span>這個月還沒有支出</span></div>';
     }
+    renderMonthlyReport(month, rows, income, expenses, balance, categories);
 
     $("list").innerHTML = rows.length ? rows.map(function (item) {
       return '<li><span class="d">' + esc(item.date.slice(5).replace("-", "/")) + '</span><span class="n">' + esc(item.category) + (item.note ? "<small>" + esc(item.note) + "</small>" : "") + '</span><span class="amt ' + (item.type === "in" ? "in" : "out") + '">' + (item.type === "in" ? "+" : "-") + money(item.amount) + '</span><button class="del" data-id="' + esc(item.id) + '" aria-label="刪除這一筆">×</button></li>';
