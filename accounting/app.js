@@ -338,4 +338,15 @@
   }).catch(function (error) {
     showError($("authMsg"), "無法確認登入狀態，請檢查網路連線後重試。", error);
   });
+
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", function () {
+      var appScope = new URL("./", document.baseURI);
+      var workerUrl = new URL("./service-worker.js", document.baseURI);
+      navigator.serviceWorker.register(workerUrl.href, { scope: appScope.pathname })
+        .catch(function (error) {
+          console.error("Service Worker 註冊失敗：", error);
+        });
+    });
+  }
 })();
