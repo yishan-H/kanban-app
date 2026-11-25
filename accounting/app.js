@@ -79,11 +79,11 @@
     });
     $("cats").innerHTML = categories.length ? categories.map(function (category) {
       return '<div class="cat"><span>' + esc(category) + '</span><div class="track"><i style="width:' + (byCategory[category] / expenses * 100) + '%"></i></div><span>' + money(byCategory[category]) + "</span></div>";
-    }).join("") : '<div class="empty">這個月還沒有支出</div>';
+    }).join("") : '<div class="empty-state"><img class="mascot" src="./images/penguin.jpg" alt="" aria-hidden="true"><span>這個月還沒有支出</span></div>';
 
     $("list").innerHTML = rows.length ? rows.map(function (item) {
       return '<li><span class="d">' + esc(item.date.slice(5).replace("-", "/")) + '</span><span class="n">' + esc(item.category) + (item.note ? "<small>" + esc(item.note) + "</small>" : "") + '</span><span class="amt ' + (item.type === "in" ? "in" : "out") + '">' + (item.type === "in" ? "+" : "-") + money(item.amount) + '</span><button class="del" data-id="' + esc(item.id) + '" aria-label="刪除這一筆">×</button></li>';
-    }).join("") : '<li class="empty" style="display:block">還沒有記錄，從上方新增第一筆吧。</li>';
+    }).join("") : '<li class="empty empty-state"><img class="mascot" src="./images/penguin.jpg" alt="" aria-hidden="true"><span>還沒有記錄，從上方新增第一筆吧。</span></li>';
   }
 
   function showError(element, label, error) {

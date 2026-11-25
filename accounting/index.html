@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>記帳小工具</title>
-  <meta name="theme-color" content="#16302b">
+  <meta name="theme-color" content="#173f38">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="記帳小工具">
@@ -21,7 +21,10 @@
     <h1>記帳小工具</h1>
 
     <section id="authPanel" class="card auth-card" aria-labelledby="authTitle">
-      <h2 id="authTitle">登入帳號</h2>
+      <div class="auth-heading">
+        <h2 id="authTitle">登入帳號</h2>
+        <img class="mascot mascot-login" src="./images/penguin.jpg" alt="" aria-hidden="true">
+      </div>
       <form id="loginForm">
         <div class="auth-fields">
           <label>Email<input type="email" id="email" autocomplete="username" required></label>
@@ -41,11 +44,18 @@
       <p id="dataMsg" class="status" role="status" aria-live="polite"></p>
       <div class="month"><label for="m" style="margin:0">月份</label><input type="month" id="m"></div>
       <section class="balance" aria-live="polite">
-        <small>本月結餘</small><div class="big" id="bal">$0</div>
-        <div class="row2"><div><small>收入</small><b id="sin">$0</b></div><div><small>支出</small><b id="sout">$0</b></div></div>
+        <div class="balance-content">
+          <small>本月結餘</small><div class="big" id="bal">$0</div>
+          <div class="row2"><div><small>收入</small><b id="sin">$0</b></div><div><small>支出</small><b id="sout">$0</b></div></div>
+        </div>
+        <img class="mascot mascot-balance" src="./images/penguin.jpg" alt="" aria-hidden="true">
       </section>
 
       <div class="card">
+        <div class="entry-heading">
+          <h2>記下今天的收支</h2>
+          <img class="mascot mascot-pencil" src="./images/penguin.jpg" alt="" aria-hidden="true">
+        </div>
         <div class="seg" role="group" aria-label="類型">
           <button type="button" id="tOut" aria-pressed="true">支出</button>
           <button type="button" id="tIn" aria-pressed="false">收入</button>

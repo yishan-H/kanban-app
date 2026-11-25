@@ -1,14 +1,18 @@
 :root {
-  --bg: #eef3f1;
-  --surface: #fff;
-  --ink: #16302b;
-  --mute: #5d726d;
-  --line: #d3dfdb;
-  --out: #c2410c;
-  --in: #0f766e;
-  --accent: #16302b;
-  --on-accent: #fff;
-  --bar: #9db8b1;
+  --bg: #faf4ea;
+  --surface: #fffcf7;
+  --ink: #49372c;
+  --mute: #75685d;
+  --line: #d9b98c;
+  --out: #9f572b;
+  --caramel: #c9824a;
+  --in: #49372c;
+  --accent: #f2e4d0;
+  --on-accent: #49372c;
+  --button: #fff8ed;
+  --bar: #f2e4d0;
+  --tea: #f2e4d0;
+  --ice: #e3f0f1;
   box-sizing: border-box;
   padding-top: env(safe-area-inset-top, 0px);
   padding-bottom: env(safe-area-inset-bottom, 0px);
@@ -17,32 +21,40 @@
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --bg: #0f1a18;
-    --surface: #17262a;
-    --ink: #e4efec;
-    --mute: #8fa8a2;
-    --line: #2a3d3a;
-    --out: #fb923c;
-    --in: #5eead4;
-    --accent: #e4efec;
-    --on-accent: #0f1a18;
-    --bar: #35564f;
-    color-scheme: dark;
+    --bg: #faf4ea;
+    --surface: #fffcf7;
+    --ink: #49372c;
+    --mute: #75685d;
+    --line: #d9b98c;
+    --out: #9f572b;
+    --caramel: #c9824a;
+    --in: #49372c;
+    --accent: #f2e4d0;
+    --on-accent: #49372c;
+    --button: #fff8ed;
+    --bar: #f2e4d0;
+    --tea: #f2e4d0;
+    --ice: #e3f0f1;
+    color-scheme: light;
   }
 }
 
 :root[data-theme="dark"] {
-  --bg: #0f1a18;
-  --surface: #17262a;
-  --ink: #e4efec;
-  --mute: #8fa8a2;
-  --line: #2a3d3a;
-  --out: #fb923c;
-  --in: #5eead4;
-  --accent: #e4efec;
-  --on-accent: #0f1a18;
-  --bar: #35564f;
-  color-scheme: dark;
+  --bg: #faf4ea;
+  --surface: #fffcf7;
+  --ink: #49372c;
+  --mute: #75685d;
+  --line: #d9b98c;
+  --out: #9f572b;
+  --caramel: #c9824a;
+  --in: #49372c;
+  --accent: #f2e4d0;
+  --on-accent: #49372c;
+  --button: #fff8ed;
+  --bar: #f2e4d0;
+  --tea: #f2e4d0;
+  --ice: #e3f0f1;
+  color-scheme: light;
 }
 
 *, *::before, *::after {
@@ -87,20 +99,53 @@ h2 {
   margin-bottom: 16px;
 }
 
+.month label {
+  flex: 0 0 auto;
+  width: auto;
+  white-space: nowrap;
+}
+
 .month input {
   padding: 6px 10px;
   border: 1px solid var(--line);
   border-radius: 8px;
-  background: var(--surface);
+  background: var(--ice);
   color: var(--ink);
   font: inherit;
 }
 
 .balance {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) clamp(56px, 18vw, 88px);
+  align-items: center;
+  gap: 8px;
   padding: 20px;
   border-radius: 14px;
   background: var(--accent);
   color: var(--on-accent);
+  box-shadow: inset 3px 0 0 var(--caramel);
+}
+
+.balance-content {
+  min-width: 0;
+}
+
+.mascot {
+  display: block;
+  flex: 0 0 auto;
+  aspect-ratio: 1;
+  border: 2px solid var(--surface);
+  border-radius: 50%;
+  background: var(--ice);
+  box-shadow: 0 2px 6px rgba(23, 59, 56, 0.12);
+  object-fit: cover;
+  object-position: center 35%;
+}
+
+.mascot-balance {
+  width: clamp(56px, 18vw, 88px);
+  height: clamp(56px, 18vw, 88px);
+  align-self: end;
 }
 
 .balance small {
@@ -109,8 +154,9 @@ h2 {
 }
 
 .balance .big {
+  overflow-wrap: anywhere;
   margin: 2px 0 12px;
-  font-size: 40px;
+  font-size: clamp(26px, 8vw, 40px);
   font-weight: 700;
   line-height: 1.2;
 }
@@ -145,9 +191,43 @@ h2 {
   margin: 0 0 12px;
 }
 
+.auth-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.mascot-login {
+  width: 68px;
+  height: 68px;
+  margin: -5px 0 -12px;
+}
+
 .auth-fields {
   display: grid;
   gap: 10px;
+}
+
+.entry-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 54px;
+  margin-bottom: 8px;
+}
+
+.entry-heading h2 {
+  margin: 0;
+  color: var(--ink);
+}
+
+.mascot-pencil {
+  width: 58px;
+  height: 58px;
+  margin: -8px 0;
+  object-position: center 30%;
 }
 
 .status {
@@ -180,7 +260,7 @@ h2 {
   padding: 6px 12px;
   border: 1px solid var(--line);
   border-radius: 8px;
-  background: var(--surface);
+  background: var(--button);
   color: var(--ink);
   font: inherit;
   cursor: pointer;
@@ -197,16 +277,17 @@ h2 {
 .seg button {
   flex: 1;
   padding: 8px;
-  border: 0;
-  background: none;
-  color: var(--mute);
+  border: 1px solid transparent;
+  background: var(--button);
+  color: var(--ink);
   font: inherit;
   cursor: pointer;
 }
 
 .seg button[aria-pressed="true"] {
-  background: var(--ink);
-  color: var(--bg);
+  border-color: var(--caramel);
+  background: var(--accent);
+  color: var(--ink);
   font-weight: 700;
 }
 
@@ -228,7 +309,7 @@ input, select {
   padding: 9px 10px;
   border: 1px solid var(--line);
   border-radius: 8px;
-  background: var(--bg);
+  background: var(--ice);
   color: var(--ink);
   font: inherit;
 }
@@ -241,17 +322,27 @@ input, select {
   width: 100%;
   margin-top: 12px;
   padding: 11px;
-  border: 0;
+  border: 1px solid var(--line);
   border-radius: 8px;
-  background: var(--ink);
-  color: var(--bg);
+  background: var(--button);
+  color: var(--ink);
   font: inherit;
   font-weight: 700;
   cursor: pointer;
 }
 
+button.secondary:hover,
+button.add:hover {
+  border-color: var(--caramel);
+  background: var(--accent);
+}
+
+.seg button:hover {
+  background: var(--accent);
+}
+
 button:focus-visible, input:focus-visible, select:focus-visible {
-  outline: 2px solid var(--in);
+  outline: 2px solid var(--caramel);
   outline-offset: 2px;
 }
 
@@ -346,8 +437,54 @@ li:last-child {
   text-align: center;
 }
 
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-width: 0;
+  padding: 16px 8px;
+  color: var(--mute);
+  text-align: center;
+}
+
+.empty-state .mascot {
+  width: 88px;
+  height: 88px;
+}
+
+.empty-state img {
+  flex: 0 0 auto;
+}
+
 @media (max-width: 420px) {
   .accountbar {
     align-items: flex-start;
+  }
+
+  .balance {
+    grid-template-columns: minmax(0, 1fr) 54px;
+    gap: 6px;
+    padding: 16px;
+  }
+
+  .balance .big {
+    font-size: clamp(24px, 8vw, 32px);
+  }
+
+  .mascot-login {
+    width: 58px;
+    height: 58px;
+  }
+
+  .mascot-pencil {
+    width: 50px;
+    height: 50px;
+  }
+
+  .empty-state .mascot {
+    width: 76px;
+    height: 76px;
   }
 }

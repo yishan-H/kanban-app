@@ -1,4 +1,4 @@
-var CACHE_NAME = "accounting-app-shell-v1";
+var CACHE_NAME = "accounting-app-shell-v7";
 var APP_BASE_URL = new URL("./", self.location.href);
 var SHELL_PATHS = [
   "./",
@@ -7,7 +7,12 @@ var SHELL_PATHS = [
   "./app.js",
   "./manifest.json",
   "./icons/icon-192.png",
-  "./icons/icon-512.png"
+  "./icons/icon-512.png",
+  "./images/penguin-login.svg",
+  "./images/penguin-coins.svg",
+  "./images/penguin-pencil.svg",
+  "./images/penguin-ledger.svg",
+  "./images/penguin.jpg"
 ];
 var SHELL_URLS = SHELL_PATHS.map(function (path) {
   return new URL(path, APP_BASE_URL).href;
