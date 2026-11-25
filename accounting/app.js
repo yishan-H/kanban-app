@@ -3,6 +3,14 @@
     out: ["餐飲", "交通", "購物", "居住", "娛樂", "其他"],
     in: ["薪資", "獎金", "其他"]
   };
+  var PIE_COLORS = [
+    "var(--caramel)",
+    "var(--ice)",
+    "var(--line)",
+    "var(--out)",
+    "#e8c29d",
+    "#b8d2d3"
+  ];
   var SUPABASE_URL = "https://vpdviztlvzsnpyqcvbdl.supabase.co";
   var SUPABASE_PUBLISHABLE_KEY = "sb_publishable_wIMWiltiFxQcOqDdu916Yw_rcIhpQsL";
   var type = "out";
@@ -71,7 +79,7 @@
     rows.forEach(function (item) {
       if (item.type === "in") {
         income += item.amount;
-      } else {
+      } else if (item.type === "out") {
         expenses += item.amount;
         byCategory[item.category] = (byCategory[item.category] || 0) + item.amount;
       }
@@ -81,12 +89,47 @@
     $("sin").textContent = money(income);
     $("sout").textContent = money(expenses);
 
-    var categories = Object.keys(byCategory).sort(function (a, b) {
-      return byCategory[b] - byCategory[a];
+    var categories = Object.keys(byCategory).map(function (category) {
+      return {
+        name: category,
+        amount: byCategory[category]
+      };
+    }).filter(function (category) {
+      return category.amount > 0;
+    }).sort(function (a, b) {
+      return b.amount - a.amount || a.name.localeCompare(b.name);
     });
-    $("cats").innerHTML = categories.length ? categories.map(function (category) {
-      return '<div class="cat"><span>' + esc(category) + '</span><div class="track"><i style="width:' + (byCategory[category] / expenses * 100) + '%"></i></div><span>' + money(byCategory[category]) + "</span></div>";
-    }).join("") : '<div class="empty-state"><img class="mascot" src="./images/penguin.jpg" alt="" aria-hidden="true"><span>這個月還沒有支出</span></div>';
+    if (expenses > 0 && categories.length) {
+      var consumed = 0;
+      var gradientStops = [];
+      categories.forEach(function (category, index) {
+        var start = consumed;
+        var end = index === categories.length - 1
+          ? 100
+          : start + (category.amount / expenses * 100);
+        category.color = PIE_COLORS[index % PIE_COLORS.length];
+        category.percentage = category.amount / expenses * 100;
+        gradientStops.push(category.color + " " + start + "% " + end + "%");
+        consumed = end;
+      });
+
+      $("cats").innerHTML =
+        '<div class="expense-chart">' +
+          '<div class="expense-pie" role="img" aria-label="當月支出分類比例圖" style="background:conic-gradient(' + gradientStops.join(",") + ')"></div>' +
+          '<div class="expense-legend" role="list" aria-label="各分類支出金額與百分比">' +
+            categories.map(function (category) {
+              var percentage = (Math.round(category.percentage * 10) / 10).toFixed(1).replace(/\.0$/, "") + "%";
+              return '<div class="expense-legend-row" role="listitem">' +
+                '<span class="expense-category"><span class="expense-swatch" aria-hidden="true" style="--slice-color:' + category.color + '"></span><span class="expense-category-name">' + esc(category.name) + '</span></span>' +
+                '<span class="expense-amount">' + money(category.amount) + '</span>' +
+                '<span class="expense-percent">' + percentage + '</span>' +
+              '</div>';
+            }).join("") +
+          '</div>' +
+        '</div>';
+    } else {
+      $("cats").innerHTML = '<div class="empty-state"><img class="mascot" src="./images/penguin.jpg" alt="" aria-hidden="true"><span>這個月還沒有支出</span></div>';
+    }
 
     $("list").innerHTML = rows.length ? rows.map(function (item) {
       return '<li><span class="d">' + esc(item.date.slice(5).replace("-", "/")) + '</span><span class="n">' + esc(item.category) + (item.note ? "<small>" + esc(item.note) + "</small>" : "") + '</span><span class="amt ' + (item.type === "in" ? "in" : "out") + '">' + (item.type === "in" ? "+" : "-") + money(item.amount) + '</span><button class="del" data-id="' + esc(item.id) + '" aria-label="刪除這一筆">×</button></li>';

@@ -1,4 +1,4 @@
-var CACHE_NAME = "accounting-app-shell-v13";
+var CACHE_NAME = "accounting-app-shell-v14";
 var APP_BASE_URL = new URL("./", self.location.href);
 var SHELL_PATHS = [
   "./",
