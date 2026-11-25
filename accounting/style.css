@@ -293,8 +293,12 @@ h2 {
 
 .grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 10px;
+}
+
+.grid > label {
+  min-width: 0;
 }
 
 label {
@@ -304,7 +308,10 @@ label {
 }
 
 input, select {
+  box-sizing: border-box;
   width: 100%;
+  min-width: 0;
+  max-width: 100%;
   margin-top: 2px;
   padding: 9px 10px;
   border: 1px solid var(--line);
@@ -312,6 +319,12 @@ input, select {
   background: var(--ice);
   color: var(--ink);
   font: inherit;
+}
+
+input[type="date"] {
+  display: block;
+  min-inline-size: 0;
+  max-inline-size: 100%;
 }
 
 .full {
@@ -486,5 +499,12 @@ li:last-child {
   .empty-state .mascot {
     width: 76px;
     height: 76px;
+  }
+}
+
+@media (max-width: 340px) {
+  .grid > label:nth-child(3),
+  .grid > label:nth-child(4) {
+    grid-column: 1 / -1;
   }
 }
