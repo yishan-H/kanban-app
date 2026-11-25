@@ -1,4 +1,4 @@
-var CACHE_NAME = "accounting-app-shell-v15";
+var CACHE_NAME = "accounting-app-shell-v16";
 var APP_BASE_URL = new URL("./", self.location.href);
 var SHELL_PATHS = [
   "./",
@@ -58,9 +58,31 @@ self.addEventListener("fetch", function (event) {
   }
 
   event.respondWith(
-    caches.match(request)
-      .then(function (cachedResponse) {
-        return cachedResponse || fetch(request);
+    fetch(request)
+      .then(function (response) {
+        if (!response || !response.ok) {
+          return response;
+        }
+        return caches.open(CACHE_NAME)
+          .then(function (cache) {
+            return cache.put(request, response.clone());
+          })
+          .then(function () {
+            return response;
+          })
+          .catch(function (error) {
+            console.error("Service Worker 快取更新失敗：", error);
+            return response;
+          });
+      })
+      .catch(function (networkError) {
+        return caches.match(request)
+          .then(function (cachedResponse) {
+            if (cachedResponse) {
+              return cachedResponse;
+            }
+            throw networkError;
+          });
       })
   );
 });
