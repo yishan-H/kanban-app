@@ -312,6 +312,14 @@ h2 {
   max-width: 100%;
 }
 
+.grid > label:nth-child(3) {
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+}
+
 label {
   display: block;
   color: var(--mute);
@@ -333,14 +341,28 @@ input, select {
 }
 
 input[type="date"] {
-  -webkit-appearance: none;
   display: block;
   box-sizing: border-box;
   width: 100%;
   min-width: 0;
   max-width: 100%;
+  margin: 0;
   min-inline-size: 0;
   max-inline-size: 100%;
+}
+
+.grid > label:nth-child(3) input[type="date"]::-webkit-date-and-time-value {
+  box-sizing: border-box;
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.grid > label:nth-child(3) input[type="date"]::-webkit-calendar-picker-indicator {
+  flex: 0 0 auto;
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
 }
 
 .grid > label:nth-child(4) input[type="text"] {
