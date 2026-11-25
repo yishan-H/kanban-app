@@ -161,6 +161,138 @@ h2 {
   line-height: 1.2;
 }
 
+.budget-card h2 {
+  margin: 0 0 12px;
+  color: var(--ink);
+}
+
+.budget-empty {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  min-width: 0;
+}
+
+.budget-metrics {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.budget-metric {
+  min-width: 0;
+  padding: 10px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--button);
+}
+
+.budget-metric-label {
+  display: block;
+  color: var(--mute);
+  font-size: 13px;
+}
+
+.budget-metric-value {
+  display: block;
+  overflow-wrap: anywhere;
+  color: var(--ink);
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.budget-state--warning .budget-metric--usage .budget-metric-value {
+  color: var(--caramel);
+}
+
+.budget-state--over .budget-metric--usage .budget-metric-value,
+.budget-overrun {
+  color: var(--out);
+}
+
+.budget-progress {
+  height: 12px;
+  overflow: hidden;
+  border-radius: 6px;
+  background: var(--line);
+}
+
+.budget-progress-fill {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  transition: width 180ms ease;
+}
+
+.budget-progress--normal .budget-progress-fill {
+  background: var(--bar);
+}
+
+.budget-progress--warning .budget-progress-fill {
+  background: var(--caramel);
+}
+
+.budget-progress--over .budget-progress-fill {
+  background: var(--out);
+}
+
+.budget-overrun {
+  margin: 8px 0 0;
+  font-weight: 700;
+}
+
+.budget-controls,
+.budget-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  margin-top: 12px;
+}
+
+.budget-input-row {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  padding: 8px 10px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--ice);
+  color: var(--ink);
+}
+
+.budget-input-row input {
+  width: 100%;
+  min-width: 0;
+  margin: 0;
+  padding: 4px 0;
+  border: 0;
+  background: transparent;
+  color: var(--ink);
+}
+
+.budget-actions .add {
+  flex: 1 0 100%;
+  width: 100%;
+  margin-top: 0;
+}
+
+.budget-message {
+  margin: 8px 0 0;
+  color: var(--out);
+  font-size: 14px;
+}
+
+.budget-message:empty {
+  display: none;
+}
+
 .row2 {
   display: flex;
   gap: 24px;

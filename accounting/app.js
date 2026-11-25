@@ -18,6 +18,8 @@
   var currentUser = null;
   var authInitialized = false;
   var loadVersion = 0;
+  var budgetEditing = false;
+  var budgetMessage = "";
   var $ = function (id) {
     return document.getElementById(id);
   };
@@ -38,6 +40,17 @@
     return "$" + Math.round(amount).toLocaleString("zh-TW");
   }
 
+  function budgetMoney(amount) {
+    var formattedAmount = Math.abs(amount).toLocaleString("zh-TW", {
+      maximumFractionDigits: 2
+    });
+    return (amount < 0 ? "-" : "") + "NT$" + formattedAmount;
+  }
+
+  function budgetPercentage(value) {
+    return (Math.round(value * 10) / 10).toFixed(1).replace(/\.0$/, "") + "%";
+  }
+
   function esc(value) {
     return String(value).replace(/[&<>"]/g, function (character) {
       return {
@@ -53,6 +66,84 @@
     $("cat").innerHTML = CATS[type].map(function (category) {
       return '<option value="' + esc(category) + '">' + esc(category) + "</option>";
     }).join("");
+  }
+
+  function budgetKey(month) {
+    return "accounting-budget:" + month;
+  }
+
+  function renderBudget(month, expenses) {
+    var budget = null;
+    var message = budgetMessage;
+    var storedValue;
+
+    try {
+      storedValue = window.localStorage.getItem(budgetKey(month));
+    } catch (error) {
+      message = "無法讀取本機預算，請檢查瀏覽器儲存設定。";
+    }
+
+    if (storedValue !== null && storedValue !== undefined) {
+      var storedBudget = Number(storedValue);
+      if (Number.isFinite(storedBudget) && storedBudget > 0) {
+        budget = storedBudget;
+      } else if (storedBudget !== 0) {
+        message = "本機預算資料無效，請重新設定。";
+      }
+    }
+
+    var messageHtml = '<p id="budgetMessage" class="budget-message" role="status" aria-live="polite">' + esc(message) + "</p>";
+    if (budgetEditing) {
+      var clearButton = budget !== null
+        ? '<button class="secondary" type="button" data-budget-action="clear">清除預算</button>'
+        : "";
+      $("budgetContent").innerHTML =
+        '<form id="budgetForm" class="budget-form" novalidate>' +
+          '<label for="budgetAmount">本月預算金額</label>' +
+          '<div class="budget-input-row"><span aria-hidden="true">NT$</span><input id="budgetAmount" name="budgetAmount" type="number" inputmode="decimal" min="0" step="any" value="' + (budget === null ? "" : String(budget)) + '"></div>' +
+          '<div class="budget-actions">' +
+            '<button class="add" type="submit">儲存預算</button>' +
+            '<button class="secondary" type="button" data-budget-action="cancel">取消</button>' +
+            clearButton +
+          '</div>' +
+          messageHtml +
+        '</form>';
+      return;
+    }
+
+    if (budget === null) {
+      $("budgetContent").innerHTML =
+        '<div class="budget-empty"><span>尚未設定本月預算</span><button class="secondary" type="button" data-budget-action="edit">設定預算</button></div>' +
+        messageHtml;
+      return;
+    }
+
+    var percentage = expenses / budget * 100;
+    var progress = Math.min(100, Math.max(0, percentage));
+    var level = percentage >= 100 ? "over" : percentage >= 80 ? "warning" : "normal";
+    var remaining = budget - expenses;
+    var overrunMessage = expenses > budget
+      ? '<p class="budget-overrun">已超出預算 ' + budgetMoney(expenses - budget) + "</p>"
+      : "";
+
+    $("budgetContent").innerHTML =
+      '<div class="budget-state budget-state--' + level + '">' +
+        '<div class="budget-metrics">' +
+          '<div class="budget-metric"><span class="budget-metric-label">本月預算</span><strong class="budget-metric-value">' + budgetMoney(budget) + '</strong></div>' +
+          '<div class="budget-metric"><span class="budget-metric-label">已支出</span><strong class="budget-metric-value">' + budgetMoney(expenses) + '</strong></div>' +
+          '<div class="budget-metric"><span class="budget-metric-label">剩餘預算</span><strong class="budget-metric-value">' + budgetMoney(remaining) + '</strong></div>' +
+          '<div class="budget-metric budget-metric--usage"><span class="budget-metric-label">使用率</span><strong class="budget-metric-value">' + budgetPercentage(percentage) + '</strong></div>' +
+        '</div>' +
+        '<div class="budget-progress budget-progress--' + level + '" role="progressbar" aria-label="預算使用率" aria-valuemin="0" aria-valuemax="100" aria-valuenow="' + progress + '" aria-valuetext="' + budgetPercentage(percentage) + '">' +
+          '<span class="budget-progress-fill" style="width:' + progress + '%"></span>' +
+        '</div>' +
+        overrunMessage +
+        '<div class="budget-controls">' +
+          '<button class="secondary" type="button" data-budget-action="edit">修改預算</button>' +
+          '<button class="secondary" type="button" data-budget-action="clear">清除預算</button>' +
+        '</div>' +
+        messageHtml +
+      '</div>';
   }
 
   function setType(newType) {
@@ -88,6 +179,7 @@
     $("bal").textContent = (income - expenses < 0 ? "-" : "") + money(Math.abs(income - expenses));
     $("sin").textContent = money(income);
     $("sout").textContent = money(expenses);
+    renderBudget(month, expenses);
 
     var categories = Object.keys(byCategory).map(function (category) {
       return {
@@ -360,7 +452,70 @@
     });
     render();
   };
-  $("m").onchange = render;
+  $("budgetCard").addEventListener("click", function (event) {
+    var button = event.target.closest("[data-budget-action]");
+    if (!button) {
+      return;
+    }
+
+    var action = button.getAttribute("data-budget-action");
+    var month = $("m").value;
+    if (action === "edit") {
+      budgetEditing = true;
+      budgetMessage = "";
+      render();
+      $("budgetAmount").focus();
+    } else if (action === "cancel") {
+      budgetEditing = false;
+      budgetMessage = "";
+      render();
+    } else if (action === "clear") {
+      try {
+        window.localStorage.removeItem(budgetKey(month));
+      } catch (error) {
+        budgetMessage = "無法清除本機預算，請檢查瀏覽器儲存設定。";
+        render();
+        return;
+      }
+      budgetEditing = false;
+      budgetMessage = "";
+      render();
+    }
+  });
+  $("budgetCard").addEventListener("submit", function (event) {
+    if (event.target.id !== "budgetForm") {
+      return;
+    }
+    event.preventDefault();
+
+    var rawValue = $("budgetAmount").value.trim();
+    var budget = Number(rawValue);
+    if (!rawValue || !Number.isFinite(budget) || budget < 0) {
+      $("budgetMessage").textContent = "請輸入有效且不小於 0 的預算金額。";
+      return;
+    }
+
+    var month = $("m").value;
+    try {
+      if (budget === 0) {
+        window.localStorage.removeItem(budgetKey(month));
+      } else {
+        window.localStorage.setItem(budgetKey(month), String(budget));
+      }
+    } catch (error) {
+      $("budgetMessage").textContent = "無法儲存本機預算，請檢查瀏覽器儲存設定。";
+      return;
+    }
+
+    budgetEditing = false;
+    budgetMessage = "";
+    render();
+  });
+  $("m").onchange = function () {
+    budgetEditing = false;
+    budgetMessage = "";
+    render();
+  };
 
   $("date").addEventListener("input", updateDateDisplay);
   $("date").addEventListener("change", updateDateDisplay);
